@@ -1,0 +1,70 @@
+<!DOCTYPE html >
+<mvc:View controllerName="concur.expenses.analyzer.controller.AnalysisData"
+	xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:l="sap.ui.layout"
+	xmlns:viz="sap.viz.ui5.controls" xmlns:c="sap.suite.ui.commons"
+	xmlns:core="sap.ui.core" xmlns:viz.data="sap.viz.ui5.data"
+	xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds">
+	<Panel width="auto" class="sapUiResponsiveMargin">
+		<headerToolbar>
+			<Toolbar height="3rem">
+				<core:Icon src="sap-icon://line-chart" class="sapUiTinyMargin"></core:Icon>
+				<Title text="Analysis data">
+				</Title>
+			</Toolbar>
+		</headerToolbar>
+		<content>
+			<VBox class="sapUiSmallMargin">
+				<DateRangeSelection id="dateRangeSelect"
+					delimiter="{path:'date>/delimiter'}" dateValue="{path:'date>/dateValue1'}"
+					secondDateValue="{path:'date>/dateValue2'}" displayFormat="{path:'date>/dateFormat'}"
+					change="handleDateChange" class="sapUiMediumMarginBottom" />
+				<VBox>
+					<Panel class="sapUiSmallMarginTopBottom">
+						<MessageStrip text="{path:'oExpensesAnalysesModel>/message'}"
+							type="Warning"
+							visible="{= ${oExpensesAnalysesModel>/message} !== '' ? true : false}"
+							showIcon="true" class="sapUiMediumMarginBottom">
+						</MessageStrip>
+						<c:ChartContainer showFullScreen="true"
+							showPersonalization="false" autoAdjustHeight="false" showLegend="true"
+							title="Expenses Chart">
+							<c:content>
+								<c:ChartContainerContent icon="sap-icon://line-chart"
+									title="Line Chart">
+									<c:content>
+										<viz:VizFrame id="expensesAnalysesVizFrame" height="700px"
+											width="100%" uiConfig="{applicationSet:'fiori'}" vizType="100_stacked_column">
+											<viz:dataset>
+												<viz.data:FlattenedDataset data="{/expensesAnalyses}">
+													<viz.data:dimensions>
+														<viz.data:DimensionDefinition
+															name="Expense Type" value="{expenseType}" />
+														<viz.data:DimensionDefinition
+															name="Currency" value="{transactionCurrency}" />
+													</viz.data:dimensions>
+													<viz.data:measures>
+														<viz.data:MeasureDefinition
+															name="Total Amount" value="{totalAmount}" />
+													</viz.data:measures>
+												</viz.data:FlattenedDataset>
+											</viz:dataset>
+
+											<viz:feeds>
+												<viz.feeds:FeedItem uid="primaryValues"
+													type="Measure" values="Total Amount" />
+												<viz.feeds:FeedItem uid="color" type="Dimension"
+													values="Expense Type" />
+												<viz.feeds:FeedItem uid="axisLabels"
+													type="Dimension" values="Currency" />
+											</viz:feeds>
+										</viz:VizFrame>
+									</c:content>
+								</c:ChartContainerContent>
+							</c:content>
+						</c:ChartContainer>
+					</Panel>
+				</VBox>
+			</VBox>
+		</content>
+	</Panel>
+</mvc:View>

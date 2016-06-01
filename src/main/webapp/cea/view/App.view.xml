@@ -1,0 +1,21 @@
+<!DOCTYPE html >
+<mvc:View controllerName="concur.expenses.analyzer.controller.App"
+	xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" displayBlock="true">
+	<App>
+		<pages>
+			<Page>
+				<headerContent>
+					<mvc:XMLView viewName="concur.expenses.analyzer.view.Header" />
+				</headerContent>
+				<content>
+					<mvc:XMLView viewName="concur.expenses.analyzer.view.AnalysisData" />
+				</content>
+				<footer>
+					<Toolbar>
+						<Text text="© 2016 SAP SE" wrapping="false"></Text>
+					</Toolbar>
+				</footer>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

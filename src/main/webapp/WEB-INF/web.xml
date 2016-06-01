@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<display-name>Expenses Analyzer for Concur</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	<listener>
+		<listener-class>com.sap.cloud.extensions.samples.concur.expenses.analyzer.application.MainServletContextListener</listener-class>
+	</listener>
+	<resource-ref>
+		<res-ref-name>jdbc/DefaultDB</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+	</resource-ref>
+	<!-- SAP HANA Cloud Platform Connectivity Configuration API -->
+	<resource-ref>
+		<res-ref-name>connectivityConfiguration</res-ref-name>
+		<res-type>com.sap.core.connectivity.api.configuration.ConnectivityConfiguration</res-type>
+	</resource-ref>
+	<!-- SAP HANA Cloud Platform User Provider API -->
+	<resource-ref>
+		<res-ref-name>UserProvider</res-ref-name>
+		<res-type>com.sap.security.um.user.UserProvider</res-type>
+	</resource-ref>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Expenses Analyzer for Concur</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>Everyone</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Logout</web-resource-name>
+			<url-pattern>/logout</url-pattern>
+		</web-resource-collection>
+	</security-constraint>
+</web-app>

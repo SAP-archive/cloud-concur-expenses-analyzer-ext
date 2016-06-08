@@ -46,7 +46,7 @@ To use this extension application, you need to:
 1. Adjust the MDC database that it uses.
 2. Build and deploy the application on SAP HANA Cloud Platform.
 3. Bind the application to the MDC database.
-4. Start the application
+4. Start the application.
 4. Set up the application in Concur.
 
 <a name="prerequisites"/>

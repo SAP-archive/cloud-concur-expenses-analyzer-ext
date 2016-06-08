@@ -11,7 +11,7 @@
 	- [Using the Eclipse IDE](#build_deploy_eclipse)
 - [Bind the Application Data Source with the MDC Database and Create a Destination](#configure)
 - [Start the Expenses Analyzer for Concur Application](#start)
-- [Set Up the Concur Part of the Expenses Analyzer for Concur](#setup_concur)
+- [Set Up the Application in Concur](#setup_concur)
 	- [Set Up Partner Application](#setup_concur_partner_application)
 	- [Set Up Technical User](#setup_concur_technical_user)
     - [Generate an Access Token](#setup_concur_access_token)
@@ -44,9 +44,10 @@ The Expenses Analyzer for Concur is a Java application that performs regular dat
 To use this extension application, you need to:
 
 1. Adjust the MDC database that it uses.
-2. Set up the application in SAP HANA Cloud Platform.
+2. Build and deploy the application on SAP HANA Cloud Platform.
 3. Bind the application to the MDC database.
-4. Set up the Concur part of the Expenses Analyzer for Concur application.
+4. Start the application
+4. Set up the application in Concur.
 
 <a name="prerequisites"/>
 ## Prerequisites
@@ -178,12 +179,12 @@ You need to bind the application data source with the MDC database and create a 
                 AccessToken: <an OAuth access token that is about to be created>
 
 <a name="start"/>
-## Start the Expenses Analyzer for Concur Application
+## Start the Application
 
 After creating the data source binding and the destination, perform [start (restart in case the application is already started) of the application via the Cloud Cockpit](https://help.hana.ondemand.com/help/frameset.htm?7612f03c711e1014839a8273b0e91070.html). 
 
 <a name="setup_concur"/>
-## Set Up the Concur Part of the Expenses Analyzer for Concur
+## Set Up the Application in Concur
 
 The Expenses Analyzer for Concur application requires an OAuth access token for the Concur company. In this way it is able to communicate with Concur on behalf of the company owner. To generate this token you need to: 
 

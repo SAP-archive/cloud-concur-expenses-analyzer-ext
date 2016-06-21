@@ -181,7 +181,7 @@ You need to bind the application data source with the MDC database and create a 
 <a name="start"/>
 ## Start the Application
 
-After creating the data source binding and the destination, perform [start (restart in case the application is already started) of the application via the Cloud Cockpit](https://help.hana.ondemand.com/help/frameset.htm?7612f03c711e1014839a8273b0e91070.html). 
+After creating the data source binding and the destination, [start (or restart in case the application is already started) of the application via the Cloud Cockpit](https://help.hana.ondemand.com/help/frameset.htm?7612f03c711e1014839a8273b0e91070.html). 
 
 <a name="setup_concur"/>
 ## Set Up the Application in Concur

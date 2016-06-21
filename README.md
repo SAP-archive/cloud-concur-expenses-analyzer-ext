@@ -208,7 +208,7 @@ The partner application comes with an **application key** that will be used when
 
 #### Register a new Partner Application (optional)
 
-If [registering a new partner application](https://developer.concur.com/manage-apps/partner-applications.html) instead of using the default one, make sure it has permissions to access **Expense Report - Add, Approve, or Update Expense Reports APIs**.
+If [you register a new partner application](https://developer.concur.com/manage-apps/partner-applications.html) instead of using the default one, make sure it has permissions to access **Expense Report - Add, Approve, or Update Expense Reports APIs**.
 
 Again - the partner application comes with an **application key** that will be used when generating the access token. You can find this key in the _Application Authorization_ section.
 

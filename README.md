@@ -199,7 +199,7 @@ You can either configure and use the default sandbox partner application or regi
 
 #### Configure and Use the Default Sandbox Partner Application
 
-You log in in Concur using the credentials of the company registered there. You need to have an Administrator authorization to configure partner applications.
+You log in Concur using the credentials of the company registered there. You need to have an Administrator authorization to configure partner applications.
 
 1. Go to _Administration_ > _Company_ > _Web Services_ > _Register Partner Application_. You already have the default sandbox partner application there. Double-click on it.
 2. Set the checkbox **Expense Report - Add, Approve, or Update Expense Reports APIs**

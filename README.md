@@ -240,7 +240,7 @@ You log in in Concur using the credentials of the company registered there. You 
 
 You need an access token for your technical user in Concur. This token is used by the Expenses Analyzer for Concur application to communicate with Concur on behalf of the technical user.
 
-The token can be generated via the [Concur Native authorization flow](https://developer.concur.com/api-reference/authentication/authentication.html)
+The token can be generated via the [Concur Native authorization flow](https://developer.concur.com/api-reference/authentication/authentication.html).
 
 This is what you have to do:
 

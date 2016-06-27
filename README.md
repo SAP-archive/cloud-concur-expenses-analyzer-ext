@@ -117,7 +117,7 @@ You have already downloaded or cloned the Expenses Analyzer for Concur. Now you 
 
         mvn clean install
 
-The build should pass successfully. The produced WAR file `ROOT.war` under target sub-folder `cloud-concur-expenses-analyzer-ext\target` is ready to be deployed.
+The produced WAR file `ROOT.war` under target sub-folder `cloud-concur-expenses-analyzer-ext\target` is ready to be deployed.
 
 #### Deploy the Application Using the Cockpit
 
@@ -153,7 +153,12 @@ When using the Eclipse IDE you can take a look at the structure and code of the 
 
 #### Deploy the Application from Eclipse
 
-To deploy the application from Eclipse IDE, follow this [procedure](https://help.hana.ondemand.com/help/frameset.htm?60ab35d9edde43a1b38cf48174a3dca2.html). Use Java Web Tomcat 7 as a runtime option.
+To deploy the application from Eclipse IDE, follow these steps:
+
+1. In the _Servers_ view right-click on the white field and choose _New_ > _Server_. 
+2. Select _SAP HANA Cloud Platform_ and choose _Next_.
+3. Select _Java Web Tomcat 7_ as a runtime option. 
+4. Add the `hotels.provider` application to the _Configured_ field and choose _Finish_.
 
 <a name="configure"/>
 ## Bind the Application Data Source with the MDC Database and Create a Destination

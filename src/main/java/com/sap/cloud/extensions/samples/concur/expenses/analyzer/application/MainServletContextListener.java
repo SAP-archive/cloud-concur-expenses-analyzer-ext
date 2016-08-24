@@ -31,6 +31,19 @@ public class MainServletContextListener implements ServletContextListener {
 	 */
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
+		startSchedulerService();
+	}
+
+	/**
+	 * Does cleanup - stops the scheduler.
+	 * 
+	 */
+	@Override
+	public void contextDestroyed(ServletContextEvent servletContextEvent) {
+		stopSchedulerService();
+	}
+	
+	private void startSchedulerService(){
 		try {
 			schedulerService = new SchedulerService();
 			schedulerService.start();
@@ -42,13 +55,8 @@ public class MainServletContextListener implements ServletContextListener {
 			throw new RuntimeException(errorMessage, e);
 		}
 	}
-
-	/**
-	 * Does cleanup - stops the scheduler.
-	 * 
-	 */
-	@Override
-	public void contextDestroyed(ServletContextEvent servletContextEvent) {
+	
+	private void stopSchedulerService(){
 		try {
 			if (schedulerService != null) {
 				schedulerService.stop();

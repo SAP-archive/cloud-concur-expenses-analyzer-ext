@@ -7,6 +7,7 @@ import org.apache.commons.codec.binary.Base64;
  *
  */
 public class HttpUtil {
+	
 	public static final String HTTP_HEADER_AUTHORIZATION = "Authorization";
 	public static final String HTTP_HEADER_X_CONSUMER_KEY = "X-ConsumerKey";
 	public static final String HTTP_HEADER_ACCEPT = "Accept";
@@ -19,11 +20,28 @@ public class HttpUtil {
 	private static final String EMPTY_SPACE = " ";
 	private static final String COLON = ":";
 
+	/**
+	 * Creates and returns authorization field for Basic authentication.
+	 * 
+	 * Combines the given username and password with a single colon and then
+	 * encodes the result using Base64.
+	 * 
+	 * @param user
+	 * @param password
+	 * @return Combined username and password with a single colon, encoded using
+	 *         Base64.
+	 */
 	public static String encodeBase64(String user, String password) {
 		return new String(Base64.encodeBase64((user + COLON + password)
 				.getBytes()));
 	}
 
+	/**
+	 * Returns OAuth header with the given OAuth token.
+	 * 
+	 * @param token OAuth token
+	 * @return OAuth header with the given OAuth token.
+	 */
 	public static String getOAuthHeader(String token) {
 		return AUTHENTICATION_OAUTH + EMPTY_SPACE + token;
 	}

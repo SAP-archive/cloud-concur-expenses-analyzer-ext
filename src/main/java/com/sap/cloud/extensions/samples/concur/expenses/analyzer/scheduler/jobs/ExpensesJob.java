@@ -71,7 +71,7 @@ public class ExpensesJob implements Job {
 
 		try {
 			List<ExpenseEntryDto> expenseEntries = ConcurFacade
-					.getExpenseEntriesPaidForPeriod(yesterday, tomorrow);
+					.retrievePaidExpenseEntriesForPeriod(yesterday, tomorrow);
 			for (ExpenseEntryDto expenseEntryDto : expenseEntries) {
 				persistExpenseEntry(expenseEntryDto);
 			}

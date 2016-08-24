@@ -78,39 +78,32 @@ public class UpdateExpensesJob implements Job {
 				UpdateExpensesJob.class.getSimpleName());
 
 		Date today = new Date();
-		Date yesterday = new Date(today.getTime() - ONE_DAY_IN_MILLISECONDS
-				* 100);
-		Date tomorrow = new Date(today.getTime() + ONE_DAY_IN_MILLISECONDS);
 
 		JobExecutionDto jobExecution = new JobExecutionDto();
 		jobExecution.setJobDate(today);
-		jobExecution.setJobStatus(JobStatus.SUCCESS);
+		jobExecution.setJobStatus(JobStatus.FAILURE);
 
 		try {
-			List<ExpenseEntryDto> expenseEntries = ConcurFacade
-					.retrievePaidExpenseEntriesForPeriod(yesterday, tomorrow);
-			for (ExpenseEntryDto expenseEntryDto : expenseEntries) {
-				persistExpenseEntry(expenseEntryDto);
-			}
+
+			retrieveAndPersistExpenseEntriesForADate(today);
+			jobExecution.setJobStatus(JobStatus.SUCCESS);
+
 		} catch (DestinationValidationException e) {
 			logger.warn(
 					WARN_PROBLEM_OCCURED_WHILE_RETRIEVING_ACCOUNT_CONFIGURATIONS,
 					e.getMessage());
-			jobExecution.setJobStatus(JobStatus.FAILURE);
 			jobExecution
 					.setMessage(MESSAGE_PROBLEM_OCCURED_WHILE_RETRIEVING_ACCOUNT_CONFIGURATIONS);
 		} catch (IOException e) {
 			logger.error(MessageFormat.format(
 					ERROR_IO_PROBLEM_OCCURED_WHILE_EXECUTING_EXPENSES_JOB,
 					e.getMessage()), e);
-			jobExecution.setJobStatus(JobStatus.FAILURE);
 			jobExecution
 					.setMessage(MESSAGE_IO_PROBLEM_OCCURED_WHILE_EXECUTING_EXPENSES_JOB);
 		} catch (SQLException e) {
 			logger.error(MessageFormat.format(
 					ERROR_SQL_PROBLEM_OCCURED_WHILE_EXECUTING_EXPENSES_JOB,
 					e.getMessage()), e);
-			jobExecution.setJobStatus(JobStatus.FAILURE);
 			jobExecution
 					.setMessage(MESSAGE_SQL_PROBLEM_OCCURED_WHILE_EXECUTING_EXPENSES_JOB);
 		} finally {
@@ -126,7 +119,7 @@ public class UpdateExpensesJob implements Job {
 		logger.debug(DEBUG_EXECUTED_JOB,
 				UpdateExpensesJob.class.getSimpleName());
 	}
-
+	
 	/**
 	 * Creates and returns new JobDetail for UpdateExpensesJob job.
 	 * 
@@ -154,6 +147,19 @@ public class UpdateExpensesJob implements Job {
 						simpleSchedule().withIntervalInMilliseconds(interval)
 								.repeatForever()).build();
 		return updateExpensesJobTrigger;
+	}
+
+	private void retrieveAndPersistExpenseEntriesForADate(Date date)
+			throws IOException, DestinationValidationException, SQLException {
+		Date aDayBeforeDate = new Date(date.getTime() - ONE_DAY_IN_MILLISECONDS);
+		Date aDayAfterDate = new Date(date.getTime() + ONE_DAY_IN_MILLISECONDS);
+
+		List<ExpenseEntryDto> expenseEntries = ConcurFacade
+				.retrievePaidExpenseEntriesForPeriod(aDayBeforeDate, aDayAfterDate);
+		
+		for (ExpenseEntryDto expenseEntryDto : expenseEntries) {
+			persistExpenseEntry(expenseEntryDto);
+		}
 	}
 
 	private void persistExpenseEntry(ExpenseEntryDto expenseEntry)

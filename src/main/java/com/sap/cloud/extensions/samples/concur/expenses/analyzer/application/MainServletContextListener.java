@@ -1,6 +1,7 @@
 package com.sap.cloud.extensions.samples.concur.expenses.analyzer.application;
 
 import java.text.MessageFormat;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sap.cloud.extensions.samples.concur.expenses.analyzer.scheduler.SchedulerService;
+import com.sap.cloud.extensions.samples.concur.expenses.analyzer.scheduler.jobs.UpdateExpensesJob;
 
 /**
  * The main servlet context listener class.
@@ -23,6 +25,9 @@ public class MainServletContextListener implements ServletContextListener {
 	private static final Logger logger = LoggerFactory
 			.getLogger(MainServletContextListener.class);
 
+	private static final Long UPDATE_EXPENSES_JOB_INTERVAL_IN_MILLISECONDS = TimeUnit.MILLISECONDS
+			.convert(5, TimeUnit.MINUTES);
+
 	private static SchedulerService schedulerService;
 
 	/**
@@ -31,7 +36,7 @@ public class MainServletContextListener implements ServletContextListener {
 	 */
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
-		startSchedulerService();
+		startSchedulerServiceAndScheduleJobs();
 	}
 
 	/**
@@ -42,11 +47,13 @@ public class MainServletContextListener implements ServletContextListener {
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		stopSchedulerService();
 	}
-	
-	private void startSchedulerService(){
+
+	private void startSchedulerServiceAndScheduleJobs() {
 		try {
 			schedulerService = new SchedulerService();
 			schedulerService.start();
+			schedulerService.scheduleJob(UpdateExpensesJob.getJobDetail(),
+					UpdateExpensesJob.getTrigger(UPDATE_EXPENSES_JOB_INTERVAL_IN_MILLISECONDS));
 		} catch (SchedulerException e) {
 			String errorMessage = MessageFormat
 					.format(ERROR_PROBLEM_OCCURED_AFTER_INITIALIZING_APPLICATION_CONTEXT,
@@ -55,8 +62,8 @@ public class MainServletContextListener implements ServletContextListener {
 			throw new RuntimeException(errorMessage, e);
 		}
 	}
-	
-	private void stopSchedulerService(){
+
+	private void stopSchedulerService() {
 		try {
 			if (schedulerService != null) {
 				schedulerService.stop();

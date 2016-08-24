@@ -1,5 +1,9 @@
 package com.sap.cloud.extensions.samples.concur.expenses.analyzer.scheduler.jobs;
 
+import static org.quartz.JobBuilder.newJob;
+import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
+import static org.quartz.TriggerBuilder.newTrigger;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.MessageFormat;
@@ -8,8 +12,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.quartz.Job;
+import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.JobKey;
+import org.quartz.Trigger;
+import org.quartz.TriggerKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +33,7 @@ import com.sap.cloud.extensions.samples.concur.expenses.analyzer.utils.Destinati
  * Job for retrieving expenses from Concur and persisting them in the database.
  *
  */
-public class ExpensesJob implements Job {
+public class UpdateExpensesJob implements Job {
 
 	private static final String DEBUG_EXECUTING_JOB = "Executing [{}] job...";
 	private static final String DEBUG_EXECUTED_JOB = "Executed [{}] job.";
@@ -42,7 +50,15 @@ public class ExpensesJob implements Job {
 	private static final String ERROR_PROBLEM_OCCURED_WHILE_CREATING_JOB_STATUS = "Problem occured while creating job status: {0}";
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(ExpensesJob.class);
+			.getLogger(UpdateExpensesJob.class);
+
+	private static final String UPDATE_EXPENSES_KEY = "update-expenses-repeat";
+	private static final String UPDATE_EXPENSES_GROUP = "expenses-analyzer";
+
+	private static final JobKey UPDATE_EXPENSES_JOB_KEY = new JobKey(
+			UPDATE_EXPENSES_KEY, UPDATE_EXPENSES_GROUP);
+	private static final TriggerKey UPDATE_EXPENSES_TRIGGER_KEY = new TriggerKey(
+			UPDATE_EXPENSES_KEY, UPDATE_EXPENSES_GROUP);
 
 	private ExpenseReportsDao expensesDao = new ExpenseReportsDao();
 	private ExpenseJobDao expenseJobDao = new ExpenseJobDao();
@@ -58,7 +74,8 @@ public class ExpensesJob implements Job {
 	@Override
 	public void execute(JobExecutionContext context)
 			throws JobExecutionException {
-		logger.debug(DEBUG_EXECUTING_JOB, ExpensesJob.class.getSimpleName());
+		logger.debug(DEBUG_EXECUTING_JOB,
+				UpdateExpensesJob.class.getSimpleName());
 
 		Date today = new Date();
 		Date yesterday = new Date(today.getTime() - ONE_DAY_IN_MILLISECONDS
@@ -106,7 +123,37 @@ public class ExpensesJob implements Job {
 				e.printStackTrace();
 			}
 		}
-		logger.debug(DEBUG_EXECUTED_JOB, ExpensesJob.class.getSimpleName());
+		logger.debug(DEBUG_EXECUTED_JOB,
+				UpdateExpensesJob.class.getSimpleName());
+	}
+
+	/**
+	 * Creates and returns new JobDetail for UpdateExpensesJob job.
+	 * 
+	 * @return new JobDetail for UpdateExpensesJob job.
+	 */
+	public static JobDetail getJobDetail() {
+		JobDetail updateExpensesJobDetail = newJob(UpdateExpensesJob.class)
+				.withIdentity(UPDATE_EXPENSES_JOB_KEY).build();
+		return updateExpensesJobDetail;
+	}
+
+	/**
+	 * Creates and returns new Trigger for UpdateExpensesJob job with the given
+	 * interval.
+	 * 
+	 * @param interval
+	 *            the trigger interval in milliseconds.
+	 * @return new Trigger for UpdateExpensesJob job with the given interval.
+	 */
+	public static Trigger getTrigger(Long interval) {
+		Trigger updateExpensesJobTrigger = newTrigger()
+				.withIdentity(UPDATE_EXPENSES_TRIGGER_KEY)
+				.startNow()
+				.withSchedule(
+						simpleSchedule().withIntervalInMilliseconds(interval)
+								.repeatForever()).build();
+		return updateExpensesJobTrigger;
 	}
 
 	private void persistExpenseEntry(ExpenseEntryDto expenseEntry)

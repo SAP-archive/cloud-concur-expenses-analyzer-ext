@@ -28,10 +28,13 @@ public class ProxyUtil {
 			.getLogger(ProxyUtil.class);
 
 	/**
-	 * Creates a proxy.
+	 * Creates a proxy object based on a proxy type.
+	 * 
+	 * In case of OnPremise proxy type - creates proxy object for on-premise connectivity.
+	 * In case of any other proxy type - creates proxy object for Internet connectivity.
 	 * 
 	 * @param proxyType
-	 *            the proxy type.
+	 *            the proxy type. "OnPremise" for on-premise connectivity.
 	 * @return the created proxy.
 	 */
 	public static Proxy getProxy(String proxyType) {

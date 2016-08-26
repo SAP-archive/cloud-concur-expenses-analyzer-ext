@@ -65,11 +65,11 @@ public class ConcurFacade {
 	 *            the start date of the period.
 	 * @param toDate
 	 *            the end date of the period.
-	 * @return
+	 * @return list with all paid expense entries for the given period.
 	 * @throws IOException
 	 * @throws DestinationValidationException
 	 */
-	public static List<ExpenseEntryDto> getExpenseEntriesPaidForPeriod(
+	public static List<ExpenseEntryDto> retrievePaidExpenseEntriesForPeriod(
 			Date fromDate, Date toDate) throws IOException,
 			DestinationValidationException {
 		logger.debug(DEBUG_RETRIEVING_CONCUR_EXPENSES_FOR_PERIOD, fromDate,
@@ -88,7 +88,7 @@ public class ConcurFacade {
 
 		for (ExpenseReportDto expenseReport : еxpenseReportsPaidForPeriod
 				.getItems()) {
-			DetailedExpenseReportDto detailedExpenseReport = getExpenseReportEntry(expenseReport
+			DetailedExpenseReportDto detailedExpenseReport = retrieveExpenseReportEntry(expenseReport
 					.getID());
 			result.addAll(detailedExpenseReport.getExpenseEntriesList());
 		}
@@ -99,7 +99,7 @@ public class ConcurFacade {
 		return result;
 	}
 
-	private static DetailedExpenseReportDto getExpenseReportEntry(
+	private static DetailedExpenseReportDto retrieveExpenseReportEntry(
 			String expenseReportEntryId) throws IOException,
 			DestinationValidationException {
 		logger.debug(DEBUG_RETRIEVING_EXPENSE_REPORT_ENTRY_WITH_ID,

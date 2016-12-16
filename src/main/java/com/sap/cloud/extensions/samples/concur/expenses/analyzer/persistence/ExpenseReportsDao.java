@@ -79,7 +79,7 @@ public class ExpenseReportsDao {
 	 * @return if the entry exists in the database.
 	 * @throws SQLException
 	 */
-	public boolean doesExpenseEntryExists(String id) throws SQLException {
+	public boolean doesExpenseEntryExist(String id) throws SQLException {
 		logger.debug(DEBUG_SEARCHING_FOR_EXPENSE, id);
 
 		Connection connection = null;

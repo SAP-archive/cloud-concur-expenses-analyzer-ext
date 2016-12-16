@@ -143,7 +143,7 @@ public class UpdateExpensesJob implements Job {
 	}
 
 	private void persistExpenseEntry(ExpenseEntryDto expenseEntry) throws SQLException {
-		if (!expensesDao.doesExpenseEntryExists(expenseEntry.getReportEntryID())) {
+		if (!expensesDao.doesExpenseEntryExist(expenseEntry.getReportEntryID())) {
 			logger.debug(DEBUG_PERSISTING_EXPENSE_ENTRY_WITH_ID, expenseEntry.getReportEntryID());
 
 			expensesDao.create(expenseEntry);

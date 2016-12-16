@@ -20,8 +20,6 @@ import com.google.gson.Gson;
  */
 public class ConcurAPIsUtil {
 
-	private static final String SLASH = "/";
-
 	private static final String API_DESTINATION = "concur-api";
 	private static final String API_DESTINATION_URL = "URL";
 	private static final String API_DESTINATION_PROXY_TYPE = "ProxyType";
@@ -137,7 +135,7 @@ public class ConcurAPIsUtil {
 	}
 
 	private static String removeTrailingSlash(String s) {
-		if (s.endsWith(SLASH)) {
+		if (s.endsWith("/")) {
 			s = s.substring(0, s.length() - 1);
 		}
 

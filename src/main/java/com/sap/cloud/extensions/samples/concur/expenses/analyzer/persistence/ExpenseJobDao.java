@@ -17,14 +17,13 @@ import com.sap.cloud.extensions.samples.concur.expenses.analyzer.facades.Persist
 
 public class ExpenseJobDao {
 
-	private static final String SCHEMA_NAME = "SHCP_EXTENSIONS_FOR_CONCUR_TRIAL_EAC";
 	private static final String TABLE_NAME = "com.sap.hcp.extensions.concur.trialeac::EXPENSES_JOB_TABLE";
-	private static final String STMT_INSERT = "INSERT INTO \"" + SCHEMA_NAME + "\".\"" + TABLE_NAME
+	private static final String STMT_INSERT = "INSERT INTO \"" + ExpenseAnalysesSchema.NAME + "\".\"" + TABLE_NAME
 			+ "\" (JOB_EXECUTION_TIMESTAMP, JOB_EXECUTION_STATUS, JOB_EXECUTION_MESSAGE) VALUES (?, ?, ?)";
 	private static final String STMT_FIND_LATEST_RECORD = "SELECT JOB_EXECUTION_TIMESTAMP, JOB_EXECUTION_STATUS, JOB_EXECUTION_MESSAGE FROM \""
-			+ SCHEMA_NAME + "\".\"" + TABLE_NAME
-			+ "\" WHERE (JOB_EXECUTION_TIMESTAMP) IN (SELECT MAX(JOB_EXECUTION_TIMESTAMP) FROM \"" + SCHEMA_NAME
-			+ "\".\"" + TABLE_NAME + "\")";
+			+ ExpenseAnalysesSchema.NAME + "\".\"" + TABLE_NAME
+			+ "\" WHERE (JOB_EXECUTION_TIMESTAMP) IN (SELECT MAX(JOB_EXECUTION_TIMESTAMP) FROM \""
+			+ ExpenseAnalysesSchema.NAME + "\".\"" + TABLE_NAME + "\")";
 
 	private static final String DEBUG_CREATING_JOB_EXECUTION_STATUS = "Creating job execution with date [{}] and status [{}]...";
 	private static final String ERROR_CREATING_JOB_EXECUTION_STATUS = "Problem occured while creating job execution with date [{0}] and status [{1}]: {2}";

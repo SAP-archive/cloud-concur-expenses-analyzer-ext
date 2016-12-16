@@ -20,15 +20,11 @@ import com.sap.cloud.extensions.samples.concur.expenses.analyzer.facades.Persist
  */
 public class ExpenseReportsDao {
 
-	private static final String SCHEMA_NAME = "SHCP_EXTENSIONS_FOR_CONCUR_TRIAL_EAC";
 	private static final String TABLE_NAME = "com.sap.hcp.extensions.concur.trialeac::EXPENSES_REPORTS_TABLE";
-	private static final String STMT_INSERT = "INSERT INTO \""
-			+ SCHEMA_NAME
-			+ "\".\""
-			+ TABLE_NAME
+	private static final String STMT_INSERT = "INSERT INTO \"" + ExpenseAnalysesSchema.NAME + "\".\"" + TABLE_NAME
 			+ "\" (ID, TRANSACTION_DATE, TOTAL_AMOUNT, TRANSACTION_CURRENCY, EXPENSE_TYPE) VALUES (?, ?, ?, ?, ?)";
-	private static final String STMT_FIND_RECORD = "SELECT ID FROM \""
-			+ SCHEMA_NAME + "\".\"" + TABLE_NAME + "\" WHERE ID = ?";
+	private static final String STMT_FIND_RECORD = "SELECT ID FROM \"" + ExpenseAnalysesSchema.NAME + "\".\""
+			+ TABLE_NAME + "\" WHERE ID = ?";
 
 	private static final String DEBUG_CREATING_EXPENSE = "Creating expense with id [{}]...";
 	private static final String ERROR_CREATING_EXPENSE = "Problem occured while creating expense with id [{0}]: {1}";
@@ -37,8 +33,7 @@ public class ExpenseReportsDao {
 	private static final String ERROR_SEARCHING_FOR_EXPENSE = "Problem occured while searching for expense record with id [{0}]: {1}";
 	private static final String DEBUG_SEARCH_RESULT_FOR_EXPENSE = "Search result for expense record with id [{}] is: [{}].";
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(ExpenseReportsDao.class);
+	private static final Logger logger = LoggerFactory.getLogger(ExpenseReportsDao.class);
 
 	/**
 	 * Persists expense.
@@ -57,17 +52,15 @@ public class ExpenseReportsDao {
 
 			PreparedStatement pstmt = connection.prepareStatement(STMT_INSERT);
 			pstmt.setString(1, expenseEntry.getReportEntryID());
-			pstmt.setDate(2, new Date(expenseEntry.getTransactionDate()
-					.getTime()));
+			pstmt.setDate(2, new Date(expenseEntry.getTransactionDate().getTime()));
 			pstmt.setDouble(3, expenseEntry.getApprovedAmount());
 			pstmt.setString(4, (expenseEntry.getTransactionCurrencyName()));
 			pstmt.setString(5, (expenseEntry.getExpenseTypeName()));
 
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
-			logger.error(
-					MessageFormat.format(ERROR_CREATING_EXPENSE,
-							expenseEntry.getReportEntryID(), e.getMessage()), e);
+			logger.error(MessageFormat.format(ERROR_CREATING_EXPENSE, expenseEntry.getReportEntryID(), e.getMessage()),
+					e);
 			throw e;
 		} finally {
 			if (connection != null) {
@@ -93,8 +86,7 @@ public class ExpenseReportsDao {
 		try {
 			connection = PersistenceFacade.createConnection();
 
-			PreparedStatement pstmt = connection
-					.prepareStatement(STMT_FIND_RECORD);
+			PreparedStatement pstmt = connection.prepareStatement(STMT_FIND_RECORD);
 			pstmt.setString(1, id);
 			ResultSet rs = pstmt.executeQuery();
 
@@ -104,9 +96,7 @@ public class ExpenseReportsDao {
 
 			return exists;
 		} catch (SQLException e) {
-			logger.error(
-					MessageFormat.format(ERROR_SEARCHING_FOR_EXPENSE, id,
-							e.getMessage()), e);
+			logger.error(MessageFormat.format(ERROR_SEARCHING_FOR_EXPENSE, id, e.getMessage()), e);
 			throw e;
 		} finally {
 			if (connection != null) {

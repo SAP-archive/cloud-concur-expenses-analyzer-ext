@@ -37,8 +37,9 @@ public class MainServletContextListener implements ServletContextListener {
 
 	private static final Logger logger = LoggerFactory.getLogger(MainServletContextListener.class);
 
-	private static final Long UPDATE_EXPENSES_JOB_INTERVAL_IN_MILLISECONDS = TimeUnit.MILLISECONDS.convert(5,
-			TimeUnit.MINUTES);
+	private static final int UPDATE_EXPENSES_JOB_INTERVAL_IN_MINUTES = 5;
+	private static final Long UPDATE_EXPENSES_JOB_INTERVAL_IN_MILLISECONDS = TimeUnit.MILLISECONDS
+			.convert(UPDATE_EXPENSES_JOB_INTERVAL_IN_MINUTES, TimeUnit.MINUTES);
 
 	private static SchedulerService schedulerService;
 

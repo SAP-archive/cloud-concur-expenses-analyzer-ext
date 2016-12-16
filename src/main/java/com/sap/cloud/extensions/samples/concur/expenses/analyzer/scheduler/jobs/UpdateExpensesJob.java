@@ -99,7 +99,6 @@ public class UpdateExpensesJob implements Job {
 				expenseJobDao.create(jobExecution);
 			} catch (SQLException e) {
 				logger.error(MessageFormat.format(ERROR_PROBLEM_OCCURED_WHILE_CREATING_JOB_STATUS, e.getMessage()), e);
-				e.printStackTrace();
 			}
 		}
 		logger.debug(DEBUG_EXECUTED_JOB, UpdateExpensesJob.class.getSimpleName());

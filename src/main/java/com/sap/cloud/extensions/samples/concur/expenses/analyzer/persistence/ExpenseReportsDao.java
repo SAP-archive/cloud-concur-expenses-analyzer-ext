@@ -53,7 +53,7 @@ public class ExpenseReportsDao {
 		Connection connection = null;
 
 		try {
-			connection = PersistenceFacade.getConnection();
+			connection = PersistenceFacade.createConnection();
 
 			PreparedStatement pstmt = connection.prepareStatement(STMT_INSERT);
 			pstmt.setString(1, expenseEntry.getReportEntryID());
@@ -91,7 +91,7 @@ public class ExpenseReportsDao {
 
 		Connection connection = null;
 		try {
-			connection = PersistenceFacade.getConnection();
+			connection = PersistenceFacade.createConnection();
 
 			PreparedStatement pstmt = connection
 					.prepareStatement(STMT_FIND_RECORD);

@@ -35,11 +35,10 @@ public class MainServletContextListener implements ServletContextListener {
 	private static final String ERROR_PROBLEM_OCCURED_AFTER_INITIALIZING_APPLICATION_CONTEXT = "Problem occured after initializing application context: {0}";
 	private static final String ERROR_PROBLEM_OCCURED_AFTER_DESTROYING_APPLICATION_CONTEXT = "Problem occured after destroying application context: {0}";
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(MainServletContextListener.class);
+	private static final Logger logger = LoggerFactory.getLogger(MainServletContextListener.class);
 
-	private static final Long UPDATE_EXPENSES_JOB_INTERVAL_IN_MILLISECONDS = TimeUnit.MILLISECONDS
-			.convert(5, TimeUnit.MINUTES);
+	private static final Long UPDATE_EXPENSES_JOB_INTERVAL_IN_MILLISECONDS = TimeUnit.MILLISECONDS.convert(5,
+			TimeUnit.MINUTES);
 
 	private static SchedulerService schedulerService;
 
@@ -50,18 +49,17 @@ public class MainServletContextListener implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 		logger.debug(DEBUG_INITIALIZING_APPLICATION);
-		
+
 		try {
 			startSchedulerService();
 			scheduleJobs();
 		} catch (SchedulerException e) {
-			String errorMessage = MessageFormat
-					.format(ERROR_PROBLEM_OCCURED_AFTER_INITIALIZING_APPLICATION_CONTEXT,
-							e.getMessage());
+			String errorMessage = MessageFormat.format(ERROR_PROBLEM_OCCURED_AFTER_INITIALIZING_APPLICATION_CONTEXT,
+					e.getMessage());
 			logger.error(errorMessage, e);
 			throw new RuntimeException(errorMessage, e);
 		}
-		
+
 		logger.debug(DEBUG_APPLICATION_INITIALIZED);
 	}
 
@@ -72,7 +70,7 @@ public class MainServletContextListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		logger.debug(DEBUG_PERFORMING_APPLICATION_CLEANUP);
-		
+
 		stopSchedulerService();
 
 		logger.debug(DEBUG_APPLICATION_CLEANUP_DONE);
@@ -88,33 +86,29 @@ public class MainServletContextListener implements ServletContextListener {
 	}
 
 	private void scheduleJobs() throws SchedulerException {
-		JobDetail updateExpensesJobDetail = UpdateExpensesJob.getJobDetail();
-		Trigger updateExpensesTrigger = UpdateExpensesJob
-				.getTrigger(UPDATE_EXPENSES_JOB_INTERVAL_IN_MILLISECONDS);
+		JobDetail updateExpensesJobDetail = UpdateExpensesJob.createJobDetail();
+		Trigger updateExpensesTrigger = UpdateExpensesJob.createTrigger(UPDATE_EXPENSES_JOB_INTERVAL_IN_MILLISECONDS);
 
-		logger.debug(DEBUG_SCHEDULING_JOB, updateExpensesJobDetail.getKey(),
-				updateExpensesTrigger.getKey());
+		logger.debug(DEBUG_SCHEDULING_JOB, updateExpensesJobDetail.getKey(), updateExpensesTrigger.getKey());
 
-		schedulerService.scheduleJob(updateExpensesJobDetail,
-				updateExpensesTrigger);
+		schedulerService.scheduleJob(updateExpensesJobDetail, updateExpensesTrigger);
 
-		logger.debug(DEBUG_JOB_SCHEDULED, updateExpensesJobDetail.getKey(),
-				updateExpensesTrigger.getKey());
+		logger.debug(DEBUG_JOB_SCHEDULED, updateExpensesJobDetail.getKey(), updateExpensesTrigger.getKey());
 	}
 
 	private void stopSchedulerService() {
 		logger.debug(DEBUG_STOPPING_SCHEDULER);
-		
+
 		try {
 			if (schedulerService != null) {
 				schedulerService.stop();
 			}
 		} catch (SchedulerException e) {
-			logger.error(MessageFormat.format(
-					ERROR_PROBLEM_OCCURED_AFTER_DESTROYING_APPLICATION_CONTEXT,
-					e.getMessage()), e);
+			logger.error(
+					MessageFormat.format(ERROR_PROBLEM_OCCURED_AFTER_DESTROYING_APPLICATION_CONTEXT, e.getMessage()),
+					e);
 		}
-		
+
 		logger.debug(DEBUG_SCHEDULER_STOPPED);
 	}
 }

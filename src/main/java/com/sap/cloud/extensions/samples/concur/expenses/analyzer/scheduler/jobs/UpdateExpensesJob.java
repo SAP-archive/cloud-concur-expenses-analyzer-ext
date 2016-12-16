@@ -49,22 +49,19 @@ public class UpdateExpensesJob implements Job {
 	private static final String MESSAGE_SQL_PROBLEM_OCCURED_WHILE_EXECUTING_EXPENSES_JOB = "Problem occured while persisting expenses. Make sure the database configurations are correct. Check the database user credentials and access rights.";
 	private static final String ERROR_PROBLEM_OCCURED_WHILE_CREATING_JOB_STATUS = "Problem occured while creating job status: {0}";
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(UpdateExpensesJob.class);
+	private static final Logger logger = LoggerFactory.getLogger(UpdateExpensesJob.class);
 
 	private static final String UPDATE_EXPENSES_KEY = "update-expenses-repeat";
 	private static final String UPDATE_EXPENSES_GROUP = "expenses-analyzer";
 
-	private static final JobKey UPDATE_EXPENSES_JOB_KEY = new JobKey(
-			UPDATE_EXPENSES_KEY, UPDATE_EXPENSES_GROUP);
-	private static final TriggerKey UPDATE_EXPENSES_TRIGGER_KEY = new TriggerKey(
-			UPDATE_EXPENSES_KEY, UPDATE_EXPENSES_GROUP);
+	private static final JobKey UPDATE_EXPENSES_JOB_KEY = new JobKey(UPDATE_EXPENSES_KEY, UPDATE_EXPENSES_GROUP);
+	private static final TriggerKey UPDATE_EXPENSES_TRIGGER_KEY = new TriggerKey(UPDATE_EXPENSES_KEY,
+			UPDATE_EXPENSES_GROUP);
 
 	private ExpenseReportsDao expensesDao = new ExpenseReportsDao();
 	private ExpenseJobDao expenseJobDao = new ExpenseJobDao();
 
-	private static final Long ONE_DAY_IN_MILLISECONDS = TimeUnit.MILLISECONDS
-			.convert(1, TimeUnit.DAYS);
+	private static final Long ONE_DAY_IN_MILLISECONDS = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
 
 	/**
 	 * Retrieves from Concur and persists in the database all paid expense
@@ -72,10 +69,8 @@ public class UpdateExpensesJob implements Job {
 	 * 
 	 */
 	@Override
-	public void execute(JobExecutionContext context)
-			throws JobExecutionException {
-		logger.debug(DEBUG_EXECUTING_JOB,
-				UpdateExpensesJob.class.getSimpleName());
+	public void execute(JobExecutionContext context) throws JobExecutionException {
+		logger.debug(DEBUG_EXECUTING_JOB, UpdateExpensesJob.class.getSimpleName());
 
 		Date today = new Date();
 
@@ -89,45 +84,35 @@ public class UpdateExpensesJob implements Job {
 			jobExecution.setJobStatus(JobStatus.SUCCESS);
 
 		} catch (DestinationValidationException e) {
-			logger.warn(
-					WARN_PROBLEM_OCCURED_WHILE_RETRIEVING_ACCOUNT_CONFIGURATIONS,
-					e.getMessage());
-			jobExecution
-					.setMessage(MESSAGE_PROBLEM_OCCURED_WHILE_RETRIEVING_ACCOUNT_CONFIGURATIONS);
+			logger.warn(WARN_PROBLEM_OCCURED_WHILE_RETRIEVING_ACCOUNT_CONFIGURATIONS, e.getMessage());
+			jobExecution.setMessage(MESSAGE_PROBLEM_OCCURED_WHILE_RETRIEVING_ACCOUNT_CONFIGURATIONS);
 		} catch (IOException e) {
-			logger.error(MessageFormat.format(
-					ERROR_IO_PROBLEM_OCCURED_WHILE_EXECUTING_EXPENSES_JOB,
-					e.getMessage()), e);
-			jobExecution
-					.setMessage(MESSAGE_IO_PROBLEM_OCCURED_WHILE_EXECUTING_EXPENSES_JOB);
+			logger.error(MessageFormat.format(ERROR_IO_PROBLEM_OCCURED_WHILE_EXECUTING_EXPENSES_JOB, e.getMessage()),
+					e);
+			jobExecution.setMessage(MESSAGE_IO_PROBLEM_OCCURED_WHILE_EXECUTING_EXPENSES_JOB);
 		} catch (SQLException e) {
-			logger.error(MessageFormat.format(
-					ERROR_SQL_PROBLEM_OCCURED_WHILE_EXECUTING_EXPENSES_JOB,
-					e.getMessage()), e);
-			jobExecution
-					.setMessage(MESSAGE_SQL_PROBLEM_OCCURED_WHILE_EXECUTING_EXPENSES_JOB);
+			logger.error(MessageFormat.format(ERROR_SQL_PROBLEM_OCCURED_WHILE_EXECUTING_EXPENSES_JOB, e.getMessage()),
+					e);
+			jobExecution.setMessage(MESSAGE_SQL_PROBLEM_OCCURED_WHILE_EXECUTING_EXPENSES_JOB);
 		} finally {
 			try {
 				expenseJobDao.create(jobExecution);
 			} catch (SQLException e) {
-				logger.error(MessageFormat.format(
-						ERROR_PROBLEM_OCCURED_WHILE_CREATING_JOB_STATUS,
-						e.getMessage()), e);
+				logger.error(MessageFormat.format(ERROR_PROBLEM_OCCURED_WHILE_CREATING_JOB_STATUS, e.getMessage()), e);
 				e.printStackTrace();
 			}
 		}
-		logger.debug(DEBUG_EXECUTED_JOB,
-				UpdateExpensesJob.class.getSimpleName());
+		logger.debug(DEBUG_EXECUTED_JOB, UpdateExpensesJob.class.getSimpleName());
 	}
-	
+
 	/**
 	 * Creates and returns new JobDetail for UpdateExpensesJob job.
 	 * 
 	 * @return new JobDetail for UpdateExpensesJob job.
 	 */
-	public static JobDetail getJobDetail() {
-		JobDetail updateExpensesJobDetail = newJob(UpdateExpensesJob.class)
-				.withIdentity(UPDATE_EXPENSES_JOB_KEY).build();
+	public static JobDetail createJobDetail() {
+		JobDetail updateExpensesJobDetail = newJob(UpdateExpensesJob.class).withIdentity(UPDATE_EXPENSES_JOB_KEY)
+				.build();
 		return updateExpensesJobDetail;
 	}
 
@@ -139,13 +124,9 @@ public class UpdateExpensesJob implements Job {
 	 *            the trigger interval in milliseconds.
 	 * @return new Trigger for UpdateExpensesJob job with the given interval.
 	 */
-	public static Trigger getTrigger(Long interval) {
-		Trigger updateExpensesJobTrigger = newTrigger()
-				.withIdentity(UPDATE_EXPENSES_TRIGGER_KEY)
-				.startNow()
-				.withSchedule(
-						simpleSchedule().withIntervalInMilliseconds(interval)
-								.repeatForever()).build();
+	public static Trigger createTrigger(Long interval) {
+		Trigger updateExpensesJobTrigger = newTrigger().withIdentity(UPDATE_EXPENSES_TRIGGER_KEY).startNow()
+				.withSchedule(simpleSchedule().withIntervalInMilliseconds(interval).repeatForever()).build();
 		return updateExpensesJobTrigger;
 	}
 
@@ -154,28 +135,23 @@ public class UpdateExpensesJob implements Job {
 		Date aDayBeforeDate = new Date(date.getTime() - ONE_DAY_IN_MILLISECONDS);
 		Date aDayAfterDate = new Date(date.getTime() + ONE_DAY_IN_MILLISECONDS);
 
-		List<ExpenseEntryDto> expenseEntries = ConcurFacade
-				.retrievePaidExpenseEntriesForPeriod(aDayBeforeDate, aDayAfterDate);
-		
+		List<ExpenseEntryDto> expenseEntries = ConcurFacade.retrievePaidExpenseEntriesForPeriod(aDayBeforeDate,
+				aDayAfterDate);
+
 		for (ExpenseEntryDto expenseEntryDto : expenseEntries) {
 			persistExpenseEntry(expenseEntryDto);
 		}
 	}
 
-	private void persistExpenseEntry(ExpenseEntryDto expenseEntry)
-			throws SQLException {
-		if (!expensesDao
-				.doesExpenseEntryExists(expenseEntry.getReportEntryID())) {
-			logger.debug(DEBUG_PERSISTING_EXPENSE_ENTRY_WITH_ID,
-					expenseEntry.getReportEntryID());
+	private void persistExpenseEntry(ExpenseEntryDto expenseEntry) throws SQLException {
+		if (!expensesDao.doesExpenseEntryExists(expenseEntry.getReportEntryID())) {
+			logger.debug(DEBUG_PERSISTING_EXPENSE_ENTRY_WITH_ID, expenseEntry.getReportEntryID());
 
 			expensesDao.create(expenseEntry);
 
-			logger.debug(DEBUG_PERSISTED_EXPENSE_ENTRY_WITH_ID,
-					expenseEntry.getReportEntryID());
+			logger.debug(DEBUG_PERSISTED_EXPENSE_ENTRY_WITH_ID, expenseEntry.getReportEntryID());
 		} else {
-			logger.debug(DEBUG_EXPENSE_ENTRY_WITH_ID_ALREADY_EXISTS,
-					expenseEntry.getReportEntryID());
+			logger.debug(DEBUG_EXPENSE_ENTRY_WITH_ID_ALREADY_EXISTS, expenseEntry.getReportEntryID());
 		}
 	}
 }

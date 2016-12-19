@@ -27,11 +27,6 @@ public class ExpenseAnalysesDao {
 			+ EXPENSES_REPORTS_VIEW
 			+ "\" WHERE TRANSACTION_DATE > ? AND TRANSACTION_DATE < ? GROUP BY TRANSACTION_DATE, TRANSACTION_CURRENCY, EXPENSE_TYPE";
 
-	private static final int EXPENSE_REPORT_ANALYSES_TRANSACTION_DATE_COLUMN_INDEX = 1;
-	private static final int EXPENSE_REPORT_ANALYSES_TOTAL_AMOUNT_COLUMN_INDEX = 2;
-	private static final int EXPENSE_REPORT_ANALYSES_TRANSACTION_CURRENCY_COLUMN_INDEX = 3;
-	private static final int EXPENSE_REPORT_ANALYSES_EXPENSE_TYPE_COLUMN_INDEX = 4;
-
 	private static final String DEBUG_SEARCHING_EXPENSE_REPORTS_ANALYSES = "Searching for expense reports analyses...";
 	private static final String ERROR_SEARCHING_EXPENSE_REPORTS_ANALYSES = "Problem occured while searching for expense reports analyses: {0}";
 	private static final String DEBUG_SEARCH_RESULT_FOR_EXPENSE_REPORTS_ANALYSES = "Search result size for expense reports analyses is: [{}].";
@@ -79,11 +74,10 @@ public class ExpenseAnalysesDao {
 		ArrayList<ExpensesAnalysisDto> list = new ArrayList<ExpensesAnalysisDto>();
 		while (rs.next()) {
 			ExpensesAnalysisDto ea = new ExpensesAnalysisDto();
-			ea.setTransactionDate(
-					new java.util.Date(rs.getDate(EXPENSE_REPORT_ANALYSES_TRANSACTION_DATE_COLUMN_INDEX).getTime()));
-			ea.setTotalAmount(rs.getDouble(EXPENSE_REPORT_ANALYSES_TOTAL_AMOUNT_COLUMN_INDEX));
-			ea.setTransactionCurrency(rs.getString(EXPENSE_REPORT_ANALYSES_TRANSACTION_CURRENCY_COLUMN_INDEX));
-			ea.setExpenseType(rs.getString(EXPENSE_REPORT_ANALYSES_EXPENSE_TYPE_COLUMN_INDEX));
+			ea.setTransactionDate(new java.util.Date(rs.getDate(1).getTime()));
+			ea.setTotalAmount(rs.getDouble(2));
+			ea.setTransactionCurrency(rs.getString(3));
+			ea.setExpenseType(rs.getString(4));
 			list.add(ea);
 		}
 		return list;

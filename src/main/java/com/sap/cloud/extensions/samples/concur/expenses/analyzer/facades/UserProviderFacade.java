@@ -23,8 +23,7 @@ public class UserProviderFacade {
 	private static final String DEBUG_INITIALIZING_USER_PROVIDER = "Initializing user provider...";
 	private static final String DEBUG_INITIALIZED_USER_PROVIDER = "User provider initialized.";
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(UserProviderFacade.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserProviderFacade.class);
 
 	private static UserProvider userProvider;
 
@@ -39,8 +38,7 @@ public class UserProviderFacade {
 			try {
 				initUserProvider();
 			} catch (NamingException e) {
-				String errorMessage = MessageFormat.format(
-						ERROR_PROBLEM_OCCURED_WHILE_INITIALIZING_USER_PROVIDER,
+				String errorMessage = MessageFormat.format(ERROR_PROBLEM_OCCURED_WHILE_INITIALIZING_USER_PROVIDER,
 						e.getMessage());
 				logger.error(errorMessage, e);
 				throw new RuntimeException(errorMessage, e);
@@ -53,8 +51,7 @@ public class UserProviderFacade {
 		logger.debug(DEBUG_INITIALIZING_USER_PROVIDER);
 
 		InitialContext ctx = new InitialContext();
-		UserProviderFacade.userProvider = (UserProvider) ctx
-				.lookup(JAVA_COMP_ENV_USER_PROVIDER);
+		UserProviderFacade.userProvider = (UserProvider) ctx.lookup(JAVA_COMP_ENV_USER_PROVIDER);
 
 		logger.debug(DEBUG_INITIALIZED_USER_PROVIDER);
 	}

@@ -7,17 +7,17 @@ import com.google.gson.annotations.SerializedName;
 /**
  * DTO for detailed expense report.
  * 
- * @see <a
- *      href="https://developer.concur.com/api-reference-deprecated/version-two/expense-reports/expense-report-get.html#reportdetails-elements">Report
+ * @see <a href=
+ *      "https://developer.concur.com/api-reference-deprecated/version-two/expense-reports/expense-report-get.html#reportdetails-elements">Report
  *      Details Schema</a>
  *
  */
 public class DetailedExpenseReportDto {
 
-    @SerializedName("ReportID")
+	@SerializedName("ReportID")
 	private String reportID;
-    
-    @SerializedName("ExpenseEntriesList")
+
+	@SerializedName("ExpenseEntriesList")
 	private List<ExpenseEntryDto> expenseEntriesList;
 
 	/**

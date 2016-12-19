@@ -48,8 +48,7 @@ public class ExpensesAnalysesDto {
 	 */
 	public void appendMessage(String message) {
 		if (message != null && !message.isEmpty()) {
-			this.message.append(this.message.length() > 0 ? "\n" + message
-					: message);
+			this.message.append(this.message.length() > 0 ? "\n" + message : message);
 		}
 	}
 }

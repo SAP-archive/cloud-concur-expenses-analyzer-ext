@@ -26,8 +26,8 @@ import com.sap.cloud.extensions.samples.concur.expenses.analyzer.utils.Destinati
 public class ConcurFacade {
 
 	/**
-	 * @see <a
-	 *      href="https://developer.concur.com/api-reference/expense/expense-report/reports.html">
+	 * @see <a href=
+	 *      "https://developer.concur.com/api-reference/expense/expense-report/reports.html">
 	 *      Concur Reports API Reference</a>
 	 */
 	private static final String EXPENSE_REPORTS_V30_PATH = "/api/v3.0/expense/reports";
@@ -36,8 +36,8 @@ public class ConcurFacade {
 	private static final int EXPENSE_SEARCH_LIMIT = 100;
 
 	/**
-	 * @see <a
-	 *      href="https://developer.concur.com/api-reference-deprecated/version-two/expense-reports/expense-report-get.html">
+	 * @see <a href=
+	 *      "https://developer.concur.com/api-reference-deprecated/version-two/expense-reports/expense-report-get.html">
 	 *      Concur Reports API Reference</a>
 	 */
 	private static final String EXPENSE_REPORT_ENTRY_V20_PATH = "/api/expense/expensereport/v2.0/report/{0}";
@@ -47,16 +47,15 @@ public class ConcurFacade {
 	private static final String DEBUG_RETRIEVING_EXPENSE_REPORT_ENTRY_WITH_ID = "Retrieving expense report entry with id [{}]...";
 	private static final String DEBUG_RETRIEVED_EXPENSE_REPORT_ENTRY_WITH_ID = "Retrieved expense report entry with id [{}].";
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(ConcurFacade.class);
+	private static final Logger logger = LoggerFactory.getLogger(ConcurFacade.class);
 
 	private static final String CONCUR_EXPENSES_REPORTS_DATE_PATTERN = "yyyy-MM-dd";
 	private static final SimpleDateFormat expensesReportsDateFormat = new SimpleDateFormat(
 			CONCUR_EXPENSES_REPORTS_DATE_PATTERN);
 
 	private static final String CONCUR_EXPENSES_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
-	private static final Gson concurExpensesGson = new GsonBuilder()
-			.setDateFormat(CONCUR_EXPENSES_DATE_PATTERN).create();
+	private static final Gson concurExpensesGson = new GsonBuilder().setDateFormat(CONCUR_EXPENSES_DATE_PATTERN)
+			.create();
 
 	/**
 	 * Retrieves all paid expenses reports for a given period.
@@ -69,50 +68,38 @@ public class ConcurFacade {
 	 * @throws IOException
 	 * @throws DestinationValidationException
 	 */
-	public static List<ExpenseEntryDto> retrievePaidExpenseEntriesForPeriod(
-			Date fromDate, Date toDate) throws IOException,
-			DestinationValidationException {
-		logger.debug(DEBUG_RETRIEVING_CONCUR_EXPENSES_FOR_PERIOD, fromDate,
-				toDate);
+	public static List<ExpenseEntryDto> retrievePaidExpenseEntriesForPeriod(Date fromDate, Date toDate)
+			throws IOException, DestinationValidationException {
+		logger.debug(DEBUG_RETRIEVING_CONCUR_EXPENSES_FOR_PERIOD, fromDate, toDate);
 
-		String expenseReportsPaidForPeriodPath = MessageFormat.format(
-				EXPENSE_REPORTS_PAID_FOR_PERIOD_V30_PATH, EXPENSE_SEARCH_LIMIT,
-				expensesReportsDateFormat.format(fromDate),
+		String expenseReportsPaidForPeriodPath = MessageFormat.format(EXPENSE_REPORTS_PAID_FOR_PERIOD_V30_PATH,
+				EXPENSE_SEARCH_LIMIT, expensesReportsDateFormat.format(fromDate),
 				expensesReportsDateFormat.format(toDate));
 
-		ExpenseReportsDto еxpenseReportsPaidForPeriod = ConcurAPIsUtil
-				.callConcurApi(expenseReportsPaidForPeriodPath,
-						ExpenseReportsDto.class, concurExpensesGson);
+		ExpenseReportsDto еxpenseReportsPaidForPeriod = ConcurAPIsUtil.callConcurApi(expenseReportsPaidForPeriodPath,
+				ExpenseReportsDto.class, concurExpensesGson);
 
 		List<ExpenseEntryDto> result = new ArrayList<ExpenseEntryDto>();
 
-		for (ExpenseReportDto expenseReport : еxpenseReportsPaidForPeriod
-				.getItems()) {
-			DetailedExpenseReportDto detailedExpenseReport = retrieveExpenseReportEntry(expenseReport
-					.getID());
+		for (ExpenseReportDto expenseReport : еxpenseReportsPaidForPeriod.getItems()) {
+			DetailedExpenseReportDto detailedExpenseReport = retrieveExpenseReportEntry(expenseReport.getID());
 			result.addAll(detailedExpenseReport.getExpenseEntriesList());
 		}
 
-		logger.debug(DEBUG_RETRIEVED_CONCUR_EXPENSES_FOR_PERIOD, result.size(),
-				fromDate, toDate);
+		logger.debug(DEBUG_RETRIEVED_CONCUR_EXPENSES_FOR_PERIOD, result.size(), fromDate, toDate);
 
 		return result;
 	}
 
-	private static DetailedExpenseReportDto retrieveExpenseReportEntry(
-			String expenseReportEntryId) throws IOException,
-			DestinationValidationException {
-		logger.debug(DEBUG_RETRIEVING_EXPENSE_REPORT_ENTRY_WITH_ID,
-				expenseReportEntryId);
+	private static DetailedExpenseReportDto retrieveExpenseReportEntry(String expenseReportEntryId)
+			throws IOException, DestinationValidationException {
+		logger.debug(DEBUG_RETRIEVING_EXPENSE_REPORT_ENTRY_WITH_ID, expenseReportEntryId);
 
-		String expenseReportEntryPath = MessageFormat.format(
-				EXPENSE_REPORT_ENTRY_V20_PATH, expenseReportEntryId);
-		DetailedExpenseReportDto detailedExpenseReport = ConcurAPIsUtil
-				.callConcurApi(expenseReportEntryPath,
-						DetailedExpenseReportDto.class, concurExpensesGson);
+		String expenseReportEntryPath = MessageFormat.format(EXPENSE_REPORT_ENTRY_V20_PATH, expenseReportEntryId);
+		DetailedExpenseReportDto detailedExpenseReport = ConcurAPIsUtil.callConcurApi(expenseReportEntryPath,
+				DetailedExpenseReportDto.class, concurExpensesGson);
 
-		logger.debug(DEBUG_RETRIEVED_EXPENSE_REPORT_ENTRY_WITH_ID,
-				expenseReportEntryId);
+		logger.debug(DEBUG_RETRIEVED_EXPENSE_REPORT_ENTRY_WITH_ID, expenseReportEntryId);
 		return detailedExpenseReport;
 	}
 }

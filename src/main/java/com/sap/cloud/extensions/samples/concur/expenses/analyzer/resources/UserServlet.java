@@ -27,20 +27,17 @@ public class UserServlet extends HttpServlet {
 	private static final String FIRSTNAME_ATTRIBUTE = "firstname";
 	private static final String LASTNAME_ATTRIBUTE = "lastname";
 
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		if (request.getUserPrincipal() != null) {
 			try {
-				User user = UserProviderFacade.getUserProvider().getUser(
-						request.getUserPrincipal().getName());
-				String userName = user.getAttribute(FIRSTNAME_ATTRIBUTE) + " "
-						+ user.getAttribute(LASTNAME_ATTRIBUTE);
-				
+				User user = UserProviderFacade.getUserProvider().getUser(request.getUserPrincipal().getName());
+				String userName = user.getAttribute(FIRSTNAME_ATTRIBUTE) + " " + user.getAttribute(LASTNAME_ATTRIBUTE);
+
 				JsonObject nameJson = new JsonObject();
 				nameJson.addProperty(PROPERTY_NAME, userName);
-				
-				response.getWriter().println(
-						nameJson.toString());
+
+				response.getWriter().println(nameJson.toString());
 			} catch (PersistenceException | UnsupportedUserAttributeException e) {
 				throw new ServletException(e);
 			}

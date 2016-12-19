@@ -24,19 +24,18 @@ public class PersistenceFacade {
 	private static final String DEBUG_INITIALIZING_DATA_SOURCE = "Initializing data source...";
 	private static final String DEBUG_INITIALIZED_DATA_SOURCE = "Data source initialized.";
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(PersistenceFacade.class);
+	private static final Logger logger = LoggerFactory.getLogger(PersistenceFacade.class);
 
 	private static DataSource dataSource;
 
 	/**
-	 * Returns SQL connection.
+	 * Creates and returns new SQL connection.
 	 * 
 	 * @return the SQL connection.
 	 * @throws SQLException
 	 *             when the connection cannot be created.
 	 */
-	public static Connection getConnection() throws SQLException {
+	public static Connection createConnection() throws SQLException {
 		return PersistenceFacade.getDataSource().getConnection();
 	}
 
@@ -45,8 +44,7 @@ public class PersistenceFacade {
 			try {
 				initDataSource();
 			} catch (NamingException e) {
-				String errorMessage = MessageFormat.format(
-						ERROR_PROBLEM_OCCURED_WHILE_INITIALIZING_DATA_SOURCE,
+				String errorMessage = MessageFormat.format(ERROR_PROBLEM_OCCURED_WHILE_INITIALIZING_DATA_SOURCE,
 						e.getMessage());
 				logger.error(errorMessage, e);
 				throw new RuntimeException(errorMessage, e);
@@ -60,8 +58,7 @@ public class PersistenceFacade {
 		logger.debug(DEBUG_INITIALIZING_DATA_SOURCE);
 
 		InitialContext ctx = new InitialContext();
-		PersistenceFacade.dataSource = (DataSource) ctx
-				.lookup(JAVA_COMP_ENV_JDBC_DEFAULT_DB);
+		PersistenceFacade.dataSource = (DataSource) ctx.lookup(JAVA_COMP_ENV_JDBC_DEFAULT_DB);
 
 		logger.debug(DEBUG_INITIALIZED_DATA_SOURCE);
 	}

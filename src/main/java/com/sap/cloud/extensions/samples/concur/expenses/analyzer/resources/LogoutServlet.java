@@ -21,12 +21,11 @@ public class LogoutServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 5388208376934914810L;
 
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		if (request.getRemoteUser() != null) {
 			try {
-				LoginContext loginContext = LoginContextFactory
-						.createLoginContext();
+				LoginContext loginContext = LoginContextFactory.createLoginContext();
 				loginContext.logout();
 			} catch (LoginException e) {
 				throw new ServletException(e);

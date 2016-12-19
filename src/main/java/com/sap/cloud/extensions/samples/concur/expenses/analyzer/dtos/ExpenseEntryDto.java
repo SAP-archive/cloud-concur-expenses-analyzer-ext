@@ -7,8 +7,8 @@ import com.google.gson.annotations.SerializedName;
 /**
  * DTO for expense entry.
  * 
- * @see <a
- *      href="https://developer.concur.com/api-reference-deprecated/version-two/expense-reports/expense-report-get.html#expenseentry-elements">
+ * @see <a href=
+ *      "https://developer.concur.com/api-reference-deprecated/version-two/expense-reports/expense-report-get.html#expenseentry-elements">
  *      Expense Entry Schema</a>
  *
  */

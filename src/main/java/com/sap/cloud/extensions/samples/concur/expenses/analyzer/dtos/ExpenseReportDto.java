@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName;
 /**
  * DTO for expense report.
  *
- * @see <a
- *      href="https://developer.concur.com/api-reference/expense/expense-report/reports.html#report">Report
+ * @see <a href=
+ *      "https://developer.concur.com/api-reference/expense/expense-report/reports.html#report">Report
  *      Schema</a>
  */
 public class ExpenseReportDto {

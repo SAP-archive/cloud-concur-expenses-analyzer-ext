@@ -25,8 +25,7 @@ public class SchedulerService {
 
 	private static final String ERROR_PROBLEM_OCCURED_WHILE_INITIALIZING_0_1 = "Problem occured while initializing [{0}]: {1}";
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(SchedulerService.class);
+	private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
 
 	private Scheduler scheduler;
 
@@ -39,8 +38,7 @@ public class SchedulerService {
 		try {
 			this.scheduler = new StdSchedulerFactory().getScheduler();
 		} catch (SchedulerException e) {
-			logger.error(MessageFormat.format(
-					ERROR_PROBLEM_OCCURED_WHILE_INITIALIZING_0_1,
+			logger.error(MessageFormat.format(ERROR_PROBLEM_OCCURED_WHILE_INITIALIZING_0_1,
 					SchedulerService.class.getSimpleName(), e.getMessage()), e);
 			throw e;
 		}
@@ -66,8 +64,7 @@ public class SchedulerService {
 	 * @param trigger
 	 * @throws SchedulerException
 	 */
-	public void scheduleJob(JobDetail jobDetail, Trigger trigger)
-			throws SchedulerException {
+	public void scheduleJob(JobDetail jobDetail, Trigger trigger) throws SchedulerException {
 		logger.debug(DEBUG_SCHEDULING_JOB, jobDetail.getKey(), trigger.getKey());
 
 		scheduler.scheduleJob(jobDetail, trigger);

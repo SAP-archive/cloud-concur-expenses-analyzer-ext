@@ -20,8 +20,6 @@ import com.google.gson.Gson;
  */
 public class ConcurAPIsUtil {
 
-	private static final String SLASH = "/";
-
 	private static final String API_DESTINATION = "concur-api";
 	private static final String API_DESTINATION_URL = "URL";
 	private static final String API_DESTINATION_PROXY_TYPE = "ProxyType";
@@ -33,8 +31,7 @@ public class ConcurAPIsUtil {
 	private static final String DEBUG_OBTAINING_CONNECTION_TO_WITH_PROXY = "Obtaining connection to [{}] with proxy [{}]...";
 	private static final String DEBUG_OBTAINED_CONNECTION_TO_WITH_PROXY = "Obtained connection to [{}] with proxy [{}].";
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(ConcurAPIsUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(ConcurAPIsUtil.class);
 
 	/**
 	 * Calls the Concur API endpoint defined by the given path. Requires the
@@ -85,45 +82,35 @@ public class ConcurAPIsUtil {
 	 *             destination cannot be found or the destination does not
 	 *             contain one of the required properties:
 	 */
-	public static String callConcurApi(String path) throws IOException,
-			DestinationValidationException {
+	public static String callConcurApi(String path) throws IOException, DestinationValidationException {
 		logger.debug(DEBUG_CALLING_CONCUR_API_AT, path);
 
-		Map<String, String> destinationProperties = DestinationUtil
-				.getDestinationProperties(API_DESTINATION);
-		validateDestinationProperties(destinationProperties,
-				API_DESTINATION_URL, API_DESTINATION_PROXY_TYPE,
+		Map<String, String> destinationProperties = DestinationUtil.retrieveDestinationProperties(API_DESTINATION);
+		validateDestinationProperties(destinationProperties, API_DESTINATION_URL, API_DESTINATION_PROXY_TYPE,
 				API_DESTINATION_ACCESS_TOKEN);
 
-		String concurApiUrl = removeTrailingSlash(destinationProperties
-				.get(API_DESTINATION_URL)) + path;
-		String proxyType = destinationProperties
-				.get(API_DESTINATION_PROXY_TYPE);
-		String accessToken = destinationProperties
-				.get(API_DESTINATION_ACCESS_TOKEN);
+		String concurApiUrl = removeTrailingSlash(destinationProperties.get(API_DESTINATION_URL)) + path;
+		String proxyType = destinationProperties.get(API_DESTINATION_PROXY_TYPE);
+		String accessToken = destinationProperties.get(API_DESTINATION_ACCESS_TOKEN);
 
-		String result = readUrlConnection(getConnection(concurApiUrl,
-				proxyType, accessToken));
+		String result = readUrlConnection(createConnection(concurApiUrl, proxyType, accessToken));
 
 		logger.debug(DEBUG_CALLED_CONCUR_API_AT, path);
 		return result;
 	}
 
-	private static void validateDestinationProperties(
-			Map<String, String> destinationProperties, String... properties)
+	private static void validateDestinationProperties(Map<String, String> destinationProperties, String... properties)
 			throws DestinationValidationException {
 		for (String propery : properties) {
 			if (!destinationProperties.containsKey(propery)) {
-				String errorMessage = MessageFormat.format(
-						ERROR_DESTINATION_DOES_NOT_CONTAIN_PROPERTY, propery);
+				String errorMessage = MessageFormat.format(ERROR_DESTINATION_DOES_NOT_CONTAIN_PROPERTY, propery);
 				logger.error(errorMessage);
 				throw new DestinationValidationException(errorMessage);
 			}
 		}
 	}
 
-	private static String readUrlConnection(HttpURLConnection connection)
-			throws IOException {
+	private static String readUrlConnection(HttpURLConnection connection) throws IOException {
 		InputStream connectionInputStream = connection.getInputStream();
 		String result = IOUtils.toString(connectionInputStream);
 		IOUtils.closeQuietly(connectionInputStream);
@@ -131,27 +118,24 @@ public class ConcurAPIsUtil {
 		return result;
 	}
 
-	private static HttpURLConnection getConnection(String url,
-			String proxyType, String oAuthToken) throws IOException {
+	private static HttpURLConnection createConnection(String url, String proxyType, String oAuthToken)
+			throws IOException {
 		logger.debug(DEBUG_OBTAINING_CONNECTION_TO_WITH_PROXY, url, proxyType);
 		URL url_ = new URL(url);
-		Proxy proxy = ProxyUtil.getProxy(proxyType);
-		HttpURLConnection concurConnection = (HttpURLConnection) url_
-				.openConnection(proxy);
+		Proxy proxy = ProxyUtil.createProxy(proxyType);
+		HttpURLConnection concurConnection = (HttpURLConnection) url_.openConnection(proxy);
 
-		concurConnection.setRequestProperty(HttpUtil.HTTP_HEADER_ACCEPT,
-				HttpUtil.MIME_TYPE_APPLICATION_JSON);
+		concurConnection.setRequestProperty(HttpUtil.HTTP_HEADER_ACCEPT, HttpUtil.MIME_TYPE_APPLICATION_JSON);
 
 		// set authorization header
-		concurConnection.setRequestProperty(HttpUtil.HTTP_HEADER_AUTHORIZATION,
-				HttpUtil.getOAuthHeader(oAuthToken));
+		concurConnection.setRequestProperty(HttpUtil.HTTP_HEADER_AUTHORIZATION, HttpUtil.getOAuthHeader(oAuthToken));
 
 		logger.debug(DEBUG_OBTAINED_CONNECTION_TO_WITH_PROXY, url, proxyType);
 		return concurConnection;
 	}
 
 	private static String removeTrailingSlash(String s) {
-		if (s.endsWith(SLASH)) {
+		if (s.endsWith("/")) {
 			s = s.substring(0, s.length() - 1);
 		}
 

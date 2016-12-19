@@ -20,24 +20,23 @@ public class ProxyUtil {
 	private static final String ON_PREMISE_PROXY_HOST = "HC_OP_HTTP_PROXY_HOST";
 	private static final String ON_PREMISE_PROXY_PORT = "HC_OP_HTTP_PROXY_PORT";
 
-
 	private static final String DEBUG_CREATING_PROXY_OF_TYPE = "Creating proxy of type: [{}]";
 	private static final String DEBUG_CREATED_PROXY = "Created proxy [{}]:[{}]";
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(ProxyUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProxyUtil.class);
 
 	/**
-	 * Creates a proxy object based on a proxy type.
+	 * Creates and returns a proxy object based on a proxy type.
 	 * 
-	 * In case of OnPremise proxy type - creates proxy object for on-premise connectivity.
-	 * In case of any other proxy type - creates proxy object for Internet connectivity.
+	 * In case of OnPremise proxy type - creates proxy object for on-premise
+	 * connectivity. In case of any other proxy type - creates proxy object for
+	 * Internet connectivity.
 	 * 
 	 * @param proxyType
 	 *            the proxy type. "OnPremise" for on-premise connectivity.
 	 * @return the created proxy.
 	 */
-	public static Proxy getProxy(String proxyType) {
+	public static Proxy createProxy(String proxyType) {
 		logger.debug(DEBUG_CREATING_PROXY_OF_TYPE, proxyType);
 
 		String proxyHost;
@@ -50,12 +49,10 @@ public class ProxyUtil {
 		} else {
 			// Get proxy for Internet connectivity
 			proxyHost = System.getProperty(INTERNET_PROXY_HOST);
-			proxyPort = Integer.parseInt(System
-					.getProperty(INTERNET_PROXY_PORT));
+			proxyPort = Integer.parseInt(System.getProperty(INTERNET_PROXY_PORT));
 		}
 
-		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
-				proxyHost, proxyPort));
+		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
 		logger.debug(DEBUG_CREATED_PROXY, proxyHost, proxyPort);
 		return proxy;
 	}

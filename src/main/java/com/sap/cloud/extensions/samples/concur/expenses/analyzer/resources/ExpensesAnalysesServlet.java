@@ -31,8 +31,7 @@ public class ExpensesAnalysesServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -4159363782231288445L;
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(ExpensesAnalysesServlet.class);
+	private static final Logger logger = LoggerFactory.getLogger(ExpensesAnalysesServlet.class);
 
 	private static final String ERROR_PROBLEM_OCCURED_WHILE_RETRIEVING_EXPENSES_ANALYSES_FOR = "Problem occured while retrieving expenses analyses: [{0}]";
 	private static final String MESSAGE_PROBLEM_OCCURED_WHILE_RETRIEVING_EXPENSES_ANALYSES = "Problem occured while retrieving expenses analyses.";
@@ -52,10 +51,9 @@ public class ExpensesAnalysesServlet extends HttpServlet {
 	 * @return list of all expenses analyses.
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		Long fromDate = Long.parseLong(request
-				.getParameter(PARAMETER_FROM_DATE));
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		Long fromDate = Long.parseLong(request.getParameter(PARAMETER_FROM_DATE));
 		Long toDate = Long.parseLong(request.getParameter(PARAMETER_TO_DATE));
 
 		ExpensesAnalysesDto result = new ExpensesAnalysesDto();
@@ -66,35 +64,28 @@ public class ExpensesAnalysesServlet extends HttpServlet {
 		response.getWriter().println(new Gson().toJson(result));
 	}
 
-	private void addExpensesAnalyses(Long fromDate, Long toDate,
-			ExpensesAnalysesDto expensesAnalysesDto) {
+	private void addExpensesAnalyses(Long fromDate, Long toDate, ExpensesAnalysesDto expensesAnalysesDto) {
 		try {
 			ExpenseAnalysesDao expenseAnalysesDao = new ExpenseAnalysesDao();
-			List<ExpensesAnalysisDto> expensesAnalyses = expenseAnalysesDao
-					.findExpenseReportsAnalyses(fromDate, toDate);
+			List<ExpensesAnalysisDto> expensesAnalyses = expenseAnalysesDao.findExpenseReportsAnalyses(fromDate,
+					toDate);
 			expensesAnalysesDto.setExpensesAnalyses(expensesAnalyses);
 		} catch (SQLException e) {
 			logger.error(
-					MessageFormat
-							.format(ERROR_PROBLEM_OCCURED_WHILE_RETRIEVING_EXPENSES_ANALYSES_FOR,
-									e.getMessage()), e);
-			expensesAnalysesDto
-					.appendMessage(MESSAGE_PROBLEM_OCCURED_WHILE_RETRIEVING_EXPENSES_ANALYSES);
+					MessageFormat.format(ERROR_PROBLEM_OCCURED_WHILE_RETRIEVING_EXPENSES_ANALYSES_FOR, e.getMessage()),
+					e);
+			expensesAnalysesDto.appendMessage(MESSAGE_PROBLEM_OCCURED_WHILE_RETRIEVING_EXPENSES_ANALYSES);
 		}
 	}
 
-	private void addLastJobExecutionMessage(
-			ExpensesAnalysesDto expensesAnalysesDto) {
+	private void addLastJobExecutionMessage(ExpensesAnalysesDto expensesAnalysesDto) {
 		try {
 			ExpenseJobDao expenseJobDao = new ExpenseJobDao();
-			JobExecutionDto jobExecution = expenseJobDao
-					.getLatestJobExecution();
+			JobExecutionDto jobExecution = expenseJobDao.retrieveLatestJobExecution();
 			expensesAnalysesDto.appendMessage(jobExecution.getMessage());
 		} catch (SQLException e) {
-			logger.error(
-					ERROR_PROBLEM_OCCURED_WHILE_RETRIEVING_LATEST_JOB_STATUS, e);
-			expensesAnalysesDto
-					.appendMessage(MESSAGE_PROBLEM_OCCURED_WHILE_RETRIEVING_JOB_STATUS);
+			logger.error(ERROR_PROBLEM_OCCURED_WHILE_RETRIEVING_LATEST_JOB_STATUS, e);
+			expensesAnalysesDto.appendMessage(MESSAGE_PROBLEM_OCCURED_WHILE_RETRIEVING_JOB_STATUS);
 		}
 	}
 }

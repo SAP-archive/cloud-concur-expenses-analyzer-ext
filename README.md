@@ -21,6 +21,7 @@
 	- [License](#additional_information_license)
 
 <a name="overview"/>
+
 ## Overview
 
 Expenses Analyzer for Concur is a sample extension application for [Concur](https://www.concur.com/) that runs on [SAP HANA Cloud Platform](https://hcp.sap.com/) and uses a HANA database. The purpose of the application is to show you analytical information about all expenses in your Concur company.
@@ -34,6 +35,7 @@ These are the SAP HANA Cloud Platform services and features in use:
 * [Trial MDC database](https://help.hana.ondemand.com/help/frameset.htm?920f2440fad245da93604c2623f0426a.html) - the application uses an MDC database.
 
 <a name="technical_details"/>
+
 ## Technical Details
 The Expenses Analyzer for Concur is a Java application that performs regular data replication from your Concur company into an MDC database. This data serves as a base for a HANA Analytical View. As a result, you can leverage the computing power of the MDC database, which performs analytical computations on top of expenses data from Concur.
 
@@ -50,6 +52,7 @@ To use this extension application, you need to:
 4. Set up the application in Concur.
 
 <a name="prerequisites"/>
+
 ## Prerequisites
 
 You need to:
@@ -60,6 +63,7 @@ You need to:
 * have set up [Maven 3.0.x](http://maven.apache.org/docs/3.0.5/release-notes.html)
 
 <a name="setup_database"/>
+
 ## Set Up the MDC Database
 In order to set up the MDC database for the Expenses Analyzer for Concur, you need to import a Delivery Unit and create a database technical user dedicated to the application.
 
@@ -100,6 +104,7 @@ You need to [create a technical MDC user]
 >Note: After creating the technical MDC user, make a single login with this user since the initial password must be changed before using it.
 
 <a name="build_deploy"/>
+
 ## Build and Deploy the Application on SAP HANA Cloud Platform
 
 You have already downloaded or cloned the Expenses Analyzer for Concur. Now you have to build the application and deploy it on the SAP HANA Cloud Platform. There are two paths you can choose from: 
@@ -108,6 +113,7 @@ You have already downloaded or cloned the Expenses Analyzer for Concur. Now you 
 * using the Eclipse IDE
 
 <a name="build_deploy_cockpit"/>
+
 ### Using the SAP HANA Cloud Platform Cockpit
 
 #### Build the Application
@@ -126,6 +132,7 @@ You have to [deploy](https://help.hana.ondemand.com/help/frameset.htm?abded96962
 >Caution: Make sure you only deploy the application without starting it. You need to bind the application to the data source first.
 
 <a name="build_deploy_eclipse"/>
+
 ### Using the Eclipse IDE
 
 When using the Eclipse IDE you can take a look at the structure and code of the application. You have to import the application as an existing Maven project and build it with Maven using `clean install`. You also have to choose Java Web Tomcat 7 as a runtime option.
@@ -161,6 +168,7 @@ To deploy the application from Eclipse IDE, follow these steps:
 4. Add the `hotels.provider` application to the _Configured_ field and choose _Finish_.
 
 <a name="configure"/>
+
 ## Bind the Application Data Source with the MDC Database and Create a Destination
 
 You need to bind the application data source with the MDC database and create a destination on the SAP HANA Cloud Platform.
@@ -184,11 +192,13 @@ You need to bind the application data source with the MDC database and create a 
                 AccessToken: <an OAuth access token that is about to be created>
 
 <a name="start"/>
+
 ## Start the Application
 
 After creating the data source binding and the destination, [start (or restart in case the application is already started) of the application via the Cloud Cockpit](https://help.hana.ondemand.com/help/frameset.htm?7612f03c711e1014839a8273b0e91070.html). 
 
 <a name="setup_concur"/>
+
 ## Set Up the Application in Concur
 
 The Expenses Analyzer for Concur application requires an OAuth access token for the Concur company. In this way it is able to communicate with Concur on behalf of the company owner. To generate this token you need to: 
@@ -198,6 +208,7 @@ The Expenses Analyzer for Concur application requires an OAuth access token for 
 * generate the OAuth access token using the application key and the user credentials
 
 <a name="setup_concur_partner_application"/>
+
 ### Set Up Partner Application
 
 You can either configure and use the default sandbox partner application or register a new partner application.
@@ -218,6 +229,7 @@ If [you register a new partner application](https://developer.concur.com/manage-
 Again - the partner application comes with an **application key** that will be used when generating the access token. You can find this key in the _Application Authorization_ section.
 
 <a name="setup_concur_technical_user"/>
+
 ### Set Up Technical User
 
 You can use the sandbox user or register a new technical user. 
@@ -241,6 +253,7 @@ You log in in Concur using the credentials of the company registered there. You 
 4. Choose _Save_ and then _Done_.
 
 <a name="setup_concur_access_token"/>
+
 ### Generate an Access Token
 
 You need an access token for your technical user in Concur. This token is used by the Expenses Analyzer for Concur application to communicate with Concur on behalf of the technical user.
@@ -255,11 +268,13 @@ This is what you have to do:
    * **Authorization** header must include Base-64 encoded credentials (LoginID:Password) of the Concur technical/sandbox user in the HTTP Basic Authentication format.
 
 <a name="setup_concur_access_token_use"/>
+
 ### Use the Access Token
 
 You can now fill the generated OAuth access token in the `concur-api` destination.
 
 <a name="concur_sample_expenses"/>
+
 ## Generate and Approve Sample Expenses in Concur
 
 The Expenses Analyzer for Concur uses Concur expenses reports. You need to add and process a few such reports to be able to see them in the Expenses Analyzer application.
@@ -287,14 +302,17 @@ To create and process an expense report, you need to:
 The report is now closed and available for the Expenses Analyzer application.
 
 <a name="additional_information"/>
+
 ## Additional Information
 
 <a name="additional_information_resources"/>
+
 ### Resources
 * SAP HANA Cloud Documentation - https://help.hana.ondemand.com/
 * Concur API - https://developer.concur.com/api-reference/index.html
 
 <a name="additional_information_license"/>
+
 ### License
 
 ```
